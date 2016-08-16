@@ -1,0 +1,19 @@
+{
+  "name": "close6",
+  "version": "1.0.0",
+  "description": "A mini-geolocation friendly server.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steinernein/close6.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steinernein/close6/issues"
+  },
+  "homepage": "https://github.com/steinernein/close6#readme"
+}
