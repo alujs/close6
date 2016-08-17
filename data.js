@@ -1,7 +1,69 @@
+var _ = require('lodash');
+var query = {};
+
 function ISODate( date_str ) {
-  return new Date(date_str);
+  return new Date(date_str).getTime();
 }
 
+function distance(lat1, lon1, lat2, lon2) { // http://www.geodatasource.com/developers/javascript
+  var radlat1 = Math.PI * lat1/180;
+  var radlat2 = Math.PI * lat2/180;
+  var theta = lon1-lon2;
+  var radtheta = Math.PI * theta/180;
+  var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  dist = Math.acos(dist);
+  dist = dist * 180/Math.PI;
+  dist = dist * 60 * 1.1515;
+  return dist;
+}
+
+
+query.sort = ( type, direction = 'asc', collection ) => {
+  if(direction === 'asc') {
+    return collection.sort((a,b) => {
+      return a[type] - b[type];
+    });
+  }
+
+  return collection.sort((a,b) => {
+    return b[type] - a[type];
+  });
+  
+};
+
+query.findById = ( type, id, collection ) => {
+  return collection.filter((item) => item[type] === id);
+};
+
+query.findByLocation = ( currentLocation, radius = 50, collection ) => {
+  return collection.filter((item) => {
+    let latitude = item.loc[0]; // y
+    let longitude = item.loc[1]; // x
+
+    return  distance(latitude, longitude, currentLocation[0], currentLocation[1]) <= radius;
+  });
+};
+
+module.exports.select = ( params ) => {
+  var results = _.reduce(params,(accumulator, value, key)=>{
+    if(key === 'createdAt' || key === 'price') {
+      return query.sort(key, value, accumulator);
+    }
+
+    if(key === 'id' || key === 'userId') {
+      return query.findById(key, value, accumulator);
+    }
+
+    if(key === 'location') {
+      return query.findByLocation(value, 50, accumulator);
+    }
+  },data);
+
+  return Promise.resolve(results);
+};
+
+
+/* dummy data below */
 var data = [{
     "id" : "53fb8f26456e74467b000001",
     "loc" : [ 
@@ -110,13 +172,3 @@ var data = [{
     "status" : "removed",
     "createdAt" : ISODate("2014-08-26T23:54:48.754Z")
 }];
-
-module.exports.get_async = function() {
-  return new Promise(function(resolve, reject) {
-    resolve(data);
-  });
-};
-
-module.exports.get = function() {
-  return data;
-};

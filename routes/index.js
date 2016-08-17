@@ -3,14 +3,12 @@ var router = express.Router();
 var handler = require('./handler.js');
 
 router.route('/')
-.get((req, res) => {
-  res.send('Hello World');
-});
+.get(handler.home);
 
 router.route('/items')
 .get(handler.get);
 
-module.exports = function( app ) {
+module.exports = ( app ) => {
   app.use(router);
   return app;
 };
