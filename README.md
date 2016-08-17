@@ -9,4 +9,4 @@ Any single item by its id -- returns an array with 1 item or empty, assumes item
 An array of items based on any userId
 A route to request for items within 50 miles of their location coordinates
 
-`npm install` and run `node app.js`
+`npm install` and run `node app.js` and navigate browser to `localhost:8080`
