@@ -1,5 +1,5 @@
 # close6
-A mini-geolocation friendly server.
+A mini-geolocation mock server.
 
 Requires the latest version of NodeJS. Uses Lodash and Express for ease of use.
 
